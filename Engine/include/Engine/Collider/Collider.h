@@ -2,7 +2,6 @@
 #define COLLIDER_H
 #include <Engine\Export.h>
 
-#include <Engine\Collider\CollisionInfos.h>
 
 #include <SFML\System\Vector2.hpp>
 #include <SFML\System\NonCopyable.hpp>
@@ -13,6 +12,7 @@
 namespace engine
 {
 	class CircleCollider;
+	class CollisionInfos;
 
 	class ENGINE_API Collider : sf::NonCopyable
 	{
@@ -26,7 +26,7 @@ namespace engine
 		virtual void SetPosition(const sf::Vector2f& _position) = 0;
 
 		virtual void Move(const sf::Vector2f& _moveVector) = 0;
-		std::list<unsigned short>::iterator FindCollider(unsigned short _id);
+		auto FindCollider(unsigned short _id);
 
 		virtual bool TestCollision(CircleCollider* const _other) = 0;
 

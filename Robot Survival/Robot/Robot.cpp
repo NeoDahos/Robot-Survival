@@ -72,26 +72,24 @@ void Robot::Lift(std::list<Scrap>& _scraps)
 	if (m_liftedScrap == nullptr)
 	{
 		sf::Vector2f selfPosition = m_sprite.getPosition();
+		Scrap* scrapToLift = nullptr;
 		float minDist = m_maxLiftDistance * m_maxLiftDistance;
 		float distance = 0.f;
-		std::list<Scrap>::iterator it = _scraps.begin();
-		std::list<Scrap>::iterator scrapToLift = _scraps.end();
-		std::list<Scrap>::iterator itEnd = _scraps.end();
 
-		for (it; it != itEnd; ++it)
+		for (auto& scrap : _scraps)
 		{
-			distance = engine::VectorLengthSq((*it).GetPosition() - selfPosition);
+			distance = engine::VectorLengthSq(scrap.GetPosition() - selfPosition);
 			if (distance <= minDist)
 			{
 				minDist = distance;
-				scrapToLift = it;
+				scrapToLift = &scrap;
 			}
 		}
 
-		if (scrapToLift != _scraps.end())
+		if (scrapToLift != nullptr)
 		{
-			if((*scrapToLift).AddCarrier(this))
-				m_liftedScrap = &(*scrapToLift);
+			if(scrapToLift->AddCarrier(this))
+				m_liftedScrap = scrapToLift;
 		}
 	}
 	else

@@ -42,13 +42,10 @@ namespace engine
 
 	void TexturesManager::ClearAllTextures()
 	{
-		std::map<sf::String, sf::Texture*>::iterator it = m_texturesMap.begin();
-		std::map<sf::String, sf::Texture*>::iterator itEnd = m_texturesMap.end();
-
-		for (it; it != itEnd; ++it)
+		for (auto& texture : m_texturesMap)
 		{
-			if ((*it).second)
-				delete (*it).second;
+			if (texture.second)
+				delete texture.second;
 		}
 
 		m_texturesMap.clear();

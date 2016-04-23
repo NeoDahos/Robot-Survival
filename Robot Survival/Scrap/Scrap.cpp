@@ -39,8 +39,8 @@ bool Scrap::AddCarrier(Robot* _robot)
 	if (m_carriersLiftPower + carrierLiftPower > m_weight * 2)
 		return false;
 
-	std::list<Robot*>::iterator it = m_carriers.begin();
-	std::list<Robot*>::iterator itEnd = m_carriers.end();
+	auto it = m_carriers.begin();
+	auto itEnd = m_carriers.end();
 
 	while (it != itEnd && (*it) != _robot)
 		++it;
@@ -56,8 +56,8 @@ bool Scrap::AddCarrier(Robot* _robot)
 
 bool Scrap::RemoveCarrier(Robot* _robot)
 {
-	std::list<Robot*>::iterator it = m_carriers.begin();
-	std::list<Robot*>::iterator itEnd = m_carriers.end();
+	auto it = m_carriers.begin();
+	auto itEnd = m_carriers.end();
 
 	while (it != itEnd && (*it) != _robot)
 		++it;

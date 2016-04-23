@@ -75,11 +75,8 @@ int main()
 		window.clear(sf::Color::White);
 
 		// Update scraps
-		std::list<Scrap>::iterator itScrap = scraps.begin();
-		std::list<Scrap>::iterator itEndScrap = scraps.end();
-
-		for (itScrap; itScrap != itEndScrap; ++itScrap)
-			(*itScrap).Draw(window);
+		for (auto& scrap : scraps)
+			scrap.Draw(window);
 		// End update scraps
 
 		ship.Draw(window);

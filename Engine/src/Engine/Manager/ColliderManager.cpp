@@ -21,8 +21,8 @@ namespace engine
 
 	void ColliderManager::EraseCollider(Collider* const _collider)
 	{
-		std::list<Collider*>::iterator it = m_colliders.begin();
-		std::list<Collider*>::iterator itEnd = m_colliders.end();
+		auto it = m_colliders.begin();
+		auto itEnd = m_colliders.end();
 
 		while (it != itEnd && (*it) != _collider)
 			++it;
@@ -33,13 +33,13 @@ namespace engine
 
 	void ColliderManager::ComputeCollisions()
 	{
-		std::list<Collider*>::iterator it1 = m_colliders.begin();
-		std::list<Collider*>::iterator it2 = m_colliders.begin();
-		std::list<Collider*>::iterator itEnd = m_colliders.end();
+		auto it1 = m_colliders.begin();
+		auto it2 = m_colliders.begin();
+		auto itEnd = m_colliders.end();
 
 		for (it1; it1 != itEnd; ++it1)
 		{
-			for (it2 = it1, it2++; it2 != itEnd; ++it2)
+			for (it2 = std::next(it1); it2 != itEnd; ++it2)
 			{
 				if ((*it2)->GetType() == Collider::ColliderType::Circle)
 					(*it1)->TestCollision(static_cast<CircleCollider*>(*it2));

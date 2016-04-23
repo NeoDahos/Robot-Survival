@@ -1,5 +1,6 @@
 #include <Engine\Collider\Collider.h>
 #include <Engine\EngineCore.h>
+#include <Engine\Collider\CollisionInfos.h>
 
 namespace engine
 {
@@ -33,10 +34,10 @@ namespace engine
 		return m_type;
 	}
 
-	std::list<unsigned short>::iterator Collider::FindCollider(unsigned short _id)
+	auto Collider::FindCollider(unsigned short _id)
 	{
-		std::list<unsigned short>::iterator it = m_collidingIds.begin();
-		std::list<unsigned short>::iterator itEnd = m_collidingIds.begin();
+		auto it = m_collidingIds.begin();
+		auto itEnd = m_collidingIds.begin();
 
 		while (it != itEnd && (*it) != _id)
 			++it;
@@ -52,8 +53,8 @@ namespace engine
 		CollisionInfos collisionInfosOther;
 		collisionInfosOther.m_other = this;
 
-		std::list<unsigned short>::iterator itSearch = FindCollider(_other->m_id);
-		std::list<unsigned short>::iterator itEnd = m_collidingIds.end();
+		auto itSearch = FindCollider(_other->m_id);
+		auto itEnd = m_collidingIds.end();
 
 		if (_isColliding)
 		{
