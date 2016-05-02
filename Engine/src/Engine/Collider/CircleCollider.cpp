@@ -3,10 +3,16 @@
 
 namespace engine
 {
-	CircleCollider::CircleCollider(float _radius, bool _isTrigger) : Collider(_isTrigger)
+	CircleCollider::CircleCollider(Object* const _parent, float _radius, bool _isTrigger) : Collider(_parent, _isTrigger)
 	{
 		m_radius = _radius;
 		m_type = ColliderType::Circle;
+	}
+
+	CircleCollider::CircleCollider(const CircleCollider& _other) : Collider(_other)
+	{
+		m_centerPosition = _other.m_centerPosition;
+		m_radius = _other.m_radius;
 	}
 
 	CircleCollider::~CircleCollider()

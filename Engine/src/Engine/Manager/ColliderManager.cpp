@@ -41,8 +41,12 @@ namespace engine
 		{
 			for (it2 = std::next(it1); it2 != itEnd; ++it2)
 			{
-				if ((*it2)->GetType() == Collider::ColliderType::Circle)
+				switch ((*it2)->GetColliderType())
+				{
+				case Collider::ColliderType::Circle:
 					(*it1)->TestCollision(static_cast<CircleCollider*>(*it2));
+					break;
+				}
 			}
 		}
 	}

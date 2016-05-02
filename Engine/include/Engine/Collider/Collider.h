@@ -2,9 +2,9 @@
 #define COLLIDER_H
 #include <Engine\Export.h>
 
+#include <Engine\Object\Component.h>
 
 #include <SFML\System\Vector2.hpp>
-#include <SFML\System\NonCopyable.hpp>
 
 #include <list>
 #include <functional>
@@ -14,15 +14,16 @@ namespace engine
 	class CircleCollider;
 	class CollisionInfos;
 
-	class ENGINE_API Collider : sf::NonCopyable
+	class ENGINE_API Collider : public Component
 	{
 	public:
 		enum ColliderType { Circle };
 
-		Collider(bool _isTrigger = false);
+		Collider(Object* const _parent, bool _isTrigger = false);
+		Collider(const Collider& _other);
 
 		unsigned short GetId() const;
-		ColliderType GetType() const;
+		ColliderType GetColliderType() const;
 		virtual void SetPosition(const sf::Vector2f& _position) = 0;
 
 		virtual void Move(const sf::Vector2f& _moveVector) = 0;

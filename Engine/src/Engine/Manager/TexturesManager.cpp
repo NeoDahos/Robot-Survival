@@ -42,7 +42,7 @@ namespace engine
 
 	void TexturesManager::ClearAllTextures()
 	{
-		for (auto& texture : m_texturesMap)
+		for (auto&& texture : m_texturesMap)
 		{
 			if (texture.second)
 				delete texture.second;

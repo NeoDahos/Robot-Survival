@@ -11,8 +11,9 @@ namespace engine
 	class ENGINE_API CircleCollider : public Collider
 	{
 	public:
-		CircleCollider(float _radius, bool _isTrigger = false);
-		~CircleCollider();
+		CircleCollider(Object* const _parent, float _radius, bool _isTrigger = false);
+		CircleCollider(const CircleCollider& _other);
+		virtual ~CircleCollider();
 
 		virtual void SetPosition(const sf::Vector2f& _position);
 

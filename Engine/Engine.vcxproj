@@ -135,6 +135,9 @@
     <ClCompile Include="src\Engine\EngineCore.cpp" />
     <ClCompile Include="src\Engine\Manager\ColliderManager.cpp" />
     <ClCompile Include="src\Engine\Manager\TexturesManager.cpp" />
+    <ClCompile Include="src\Engine\Object\Component.cpp" />
+    <ClCompile Include="src\Engine\Object\Object.cpp" />
+    <ClCompile Include="src\Engine\Object\Transform.cpp" />
     <ClCompile Include="src\Engine\Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,9 @@
     <ClInclude Include="include\Engine\Manager\ColliderManager.h" />
     <ClInclude Include="include\Engine\Export.h" />
     <ClInclude Include="include\Engine\Manager\TexturesManager.h" />
+    <ClInclude Include="include\Engine\Object\Component.h" />
+    <ClInclude Include="include\Engine\Object\Object.h" />
+    <ClInclude Include="include\Engine\Object\Transform.h" />
     <ClInclude Include="include\Engine\Tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

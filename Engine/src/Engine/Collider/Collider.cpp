@@ -6,22 +6,37 @@ namespace engine
 {
 	unsigned short Collider::s_instanceCount = 0;
 
-	Collider::Collider(bool _isTrigger)
+	Collider::Collider(Object* const _parent, bool _isTrigger) : Component(_parent)
 	{
 		m_isTrigger = _isTrigger;
+		m_isUnique = false;
 		m_id = s_instanceCount;
 		s_instanceCount++;
 
-		m_onCollisionEnter = [this](const CollisionInfos& _collisionInfos) { /*printf("Collision Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
-		m_onTriggerEnter = [this](const CollisionInfos& _collisionInfos) { /*printf("Trigger Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
+		/*m_onCollisionEnter = [this](const CollisionInfos& _collisionInfos) { printf("Collision Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
+		m_onTriggerEnter = [this](const CollisionInfos& _collisionInfos) { printf("Trigger Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
 
-		m_onCollisionStay = [this](const CollisionInfos& _collisionInfos) { /*printf("Collision de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
-		m_onTriggerStay = [this](const CollisionInfos& _collisionInfos) { /*printf("Trigger de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
+		m_onCollisionStay = [this](const CollisionInfos& _collisionInfos) { printf("Collision de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
+		m_onTriggerStay = [this](const CollisionInfos& _collisionInfos) { printf("Trigger de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
 
-		m_onCollisionExit = [this](const CollisionInfos& _collisionInfos) { /*printf("Collision Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
-		m_onTriggerExit		= [this](const CollisionInfos& _collisionInfos) { /*printf("Trigger Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id);*/ };
+		m_onCollisionExit = [this](const CollisionInfos& _collisionInfos) { printf("Collision Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
+		m_onTriggerExit		= [this](const CollisionInfos& _collisionInfos) { printf("Trigger Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };*/
+
+		m_onCollisionEnter = [](const CollisionInfos& _collisionInfos) { };
+		m_onTriggerEnter = [](const CollisionInfos& _collisionInfos) { };
+
+		m_onCollisionStay = [](const CollisionInfos& _collisionInfos) { };
+		m_onTriggerStay = [](const CollisionInfos& _collisionInfos) { };
+
+		m_onCollisionExit = [](const CollisionInfos& _collisionInfos) { };
+		m_onTriggerExit = [](const CollisionInfos& _collisionInfos) { };
 
 		ColliderMng.AddCollider(this);
+	}
+
+	Collider::Collider(const Collider& _other) : Collider(_other.m_parent, _other.m_isTrigger)
+	{
+		m_type = _other.m_type;
 	}
 
 	unsigned short Collider::GetId() const
@@ -29,7 +44,7 @@ namespace engine
 		return m_id;
 	}
 
-	Collider::ColliderType Collider::GetType() const
+	Collider::ColliderType Collider::GetColliderType() const
 	{
 		return m_type;
 	}
@@ -37,7 +52,7 @@ namespace engine
 	auto Collider::FindCollider(unsigned short _id)
 	{
 		auto it = m_collidingIds.begin();
-		auto itEnd = m_collidingIds.begin();
+		auto itEnd = m_collidingIds.end();
 
 		while (it != itEnd && (*it) != _id)
 			++it;

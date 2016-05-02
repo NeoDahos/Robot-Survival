@@ -8,7 +8,7 @@ namespace engine
 {
 	class Collider;
 
-	class ENGINE_API CollisionInfos : sf::NonCopyable
+	class ENGINE_API CollisionInfos : public sf::NonCopyable
 	{
 	public:
 		Collider* m_other;
