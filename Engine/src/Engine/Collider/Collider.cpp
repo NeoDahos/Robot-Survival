@@ -1,6 +1,7 @@
 #include <Engine\Collider\Collider.h>
 #include <Engine\EngineCore.h>
 #include <Engine\Collider\CollisionInfos.h>
+#include <Engine\Object\Object.h>
 
 namespace engine
 {
@@ -13,30 +14,13 @@ namespace engine
 		m_id = s_instanceCount;
 		s_instanceCount++;
 
-		/*m_onCollisionEnter = [this](const CollisionInfos& _collisionInfos) { printf("Collision Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
-		m_onTriggerEnter = [this](const CollisionInfos& _collisionInfos) { printf("Trigger Enter de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
-
-		m_onCollisionStay = [this](const CollisionInfos& _collisionInfos) { printf("Collision de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
-		m_onTriggerStay = [this](const CollisionInfos& _collisionInfos) { printf("Trigger de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
-
-		m_onCollisionExit = [this](const CollisionInfos& _collisionInfos) { printf("Collision Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };
-		m_onTriggerExit		= [this](const CollisionInfos& _collisionInfos) { printf("Trigger Exit de %d avec %d !\n", m_id, _collisionInfos.m_other->m_id); };*/
-
-		m_onCollisionEnter = [](const CollisionInfos& _collisionInfos) { };
-		m_onTriggerEnter = [](const CollisionInfos& _collisionInfos) { };
-
-		m_onCollisionStay = [](const CollisionInfos& _collisionInfos) { };
-		m_onTriggerStay = [](const CollisionInfos& _collisionInfos) { };
-
-		m_onCollisionExit = [](const CollisionInfos& _collisionInfos) { };
-		m_onTriggerExit = [](const CollisionInfos& _collisionInfos) { };
-
 		ColliderMng.AddCollider(this);
 	}
 
 	Collider::Collider(const Collider& _other) : Collider(_other.m_parent, _other.m_isTrigger)
 	{
-		m_type = _other.m_type;
+		m_componentType = _other.m_componentType;
+		m_colliderType = _other.m_colliderType;
 	}
 
 	unsigned short Collider::GetId() const
@@ -46,7 +30,7 @@ namespace engine
 
 	Collider::ColliderType Collider::GetColliderType() const
 	{
-		return m_type;
+		return m_colliderType;
 	}
 
 	auto Collider::FindCollider(unsigned short _id)
@@ -63,10 +47,12 @@ namespace engine
 	void Collider::ManageCollision(Collider* const _other, bool _isColliding)
 	{
 		CollisionInfos collisionInfos;
-		collisionInfos.m_other = _other;
+		collisionInfos.m_collider = _other;
+		collisionInfos.m_object = _other->m_parent;
 
 		CollisionInfos collisionInfosOther;
-		collisionInfosOther.m_other = this;
+		collisionInfosOther.m_collider = this;
+		collisionInfosOther.m_object = m_parent;
 
 		auto itSearch = FindCollider(_other->m_id);
 		auto itEnd = m_collidingIds.end();
@@ -80,26 +66,26 @@ namespace engine
 
 				if (m_isTrigger)
 				{
-					m_onTriggerEnter(collisionInfos);
-					_other->m_onTriggerEnter(collisionInfosOther);
+					m_parent->OnTriggerEnter(collisionInfos);
+					_other->m_parent->OnTriggerEnter(collisionInfosOther);
 				}
 				else
 				{
-					m_onCollisionEnter(collisionInfos);
-					_other->m_onCollisionEnter(collisionInfosOther);
+					m_parent->OnCollisionEnter(collisionInfos);
+					_other->m_parent->OnCollisionEnter(collisionInfosOther);
 				}
 			}
 			else
 			{
 				if (m_isTrigger)
 				{
-					m_onTriggerStay(collisionInfos);
-					_other->m_onTriggerStay(collisionInfosOther);
+					m_parent->OnTriggerStay(collisionInfos);
+					_other->m_parent->OnTriggerStay(collisionInfosOther);
 				}
 				else
 				{
-					m_onCollisionStay(collisionInfos);
-					_other->m_onCollisionStay(collisionInfosOther);
+					m_parent->OnCollisionStay(collisionInfos);
+					_other->m_parent->OnCollisionStay(collisionInfosOther);
 				}
 			}
 		}
@@ -110,13 +96,13 @@ namespace engine
 
 			if (m_isTrigger)
 			{
-				m_onTriggerExit(collisionInfos);
-				_other->m_onTriggerExit(collisionInfosOther);
+				m_parent->OnTriggerExit(collisionInfos);
+				_other->m_parent->OnTriggerExit(collisionInfosOther);
 			}
 			else
 			{
-				m_onCollisionExit(collisionInfos);
-				_other->m_onCollisionExit(collisionInfosOther);
+				m_parent->OnCollisionExit(collisionInfos);
+				_other->m_parent->OnCollisionExit(collisionInfosOther);
 			}
 		}
 	}

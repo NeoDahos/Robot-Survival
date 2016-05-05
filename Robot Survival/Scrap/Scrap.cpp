@@ -1,17 +1,18 @@
 #include "Scrap.h"
 #include <Engine\EngineCore.h>
+#include <Engine\Object\Transform.h>
 
 #include <SFML\System\String.hpp>
 #include <SFML\Graphics\RenderTarget.hpp>
 
 #include "..\Robot\Robot.h"
 
-Scrap::Scrap(const sf::String& _spriteName, unsigned short _weight) : m_collider(32.f), m_carriersLiftPower(0)
+Scrap::Scrap(const sf::String& _spriteName, unsigned short _weight) : m_collider(this, 32.f), m_carriersLiftPower(0)
 {
 	m_sprite.setTexture(engine::TextureMng.GetTexture(_spriteName));
 	sf::FloatRect bounds = m_sprite.getGlobalBounds();
 	m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-	m_collider.SetPosition(m_sprite.getPosition());
+	m_collider.SetPosition(GetPosition());
 
 	m_weight = _weight;
 	m_size = bounds.width / 2.f;
@@ -20,11 +21,6 @@ Scrap::Scrap(const sf::String& _spriteName, unsigned short _weight) : m_collider
 Scrap::~Scrap()
 {
 	m_carriers.clear();
-}
-
-sf::Vector2f Scrap::GetPosition() const
-{
-	return m_sprite.getPosition();
 }
 
 float Scrap::GetSize() const
@@ -71,13 +67,7 @@ bool Scrap::RemoveCarrier(Robot* _robot)
 	return true;
 }
 
-void Scrap::Move(sf::Vector2f _move)
+void Scrap::Draw(sf::RenderTarget& _target, const sf::RenderStates& _states)
 {
-	m_sprite.move(_move);
-	m_collider.Move(_move);
-}
-
-void Scrap::Draw(sf::RenderTarget& _target)
-{
-	_target.draw(m_sprite);
+	_target.draw(m_sprite, _states.transform * m_transform->getTransform());
 }

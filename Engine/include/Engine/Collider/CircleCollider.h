@@ -16,13 +16,12 @@ namespace engine
 		virtual ~CircleCollider();
 
 		virtual void SetPosition(const sf::Vector2f& _position);
-
-		virtual void Move(const sf::Vector2f& _moveVector);
+		virtual sf::Vector2f GetPosition() const;
 
 		virtual bool TestCollision(CircleCollider* const _other);
 
 	protected:
-		sf::Vector2f m_centerPosition;
+		sf::Vector2f m_centerPosition; // Relative to parent transform
 		float m_radius;
 	};
 }

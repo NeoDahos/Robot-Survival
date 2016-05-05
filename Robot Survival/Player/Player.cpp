@@ -2,6 +2,7 @@
 #include "..\Global.h"
 
 #include <Engine\Tools.h>
+#include <Engine\Object\Transform.h>
 
 #include <SFML\Graphics\RenderTarget.hpp>
 
@@ -24,8 +25,7 @@ void Player::Update(float _deltaTime)
 	if (m_isWalking)
 	{
 		sf::Vector2f moveVector = (moveDirection * m_walkingSpeed) * _deltaTime;
-		m_sprite.move(moveVector);
-		m_collider.Move(moveVector);
+		Move(moveVector);
 	}
 
 	Robot::Update(_deltaTime);

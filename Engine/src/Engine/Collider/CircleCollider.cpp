@@ -1,4 +1,5 @@
 #include <Engine\Collider\CircleCollider.h>
+#include <Engine\Object\Object.h>
 #include <Engine\Tools.h>
 
 namespace engine
@@ -6,7 +7,7 @@ namespace engine
 	CircleCollider::CircleCollider(Object* const _parent, float _radius, bool _isTrigger) : Collider(_parent, _isTrigger)
 	{
 		m_radius = _radius;
-		m_type = ColliderType::Circle;
+		m_colliderType = ColliderType::Circle;
 	}
 
 	CircleCollider::CircleCollider(const CircleCollider& _other) : Collider(_other)
@@ -24,14 +25,14 @@ namespace engine
 		m_centerPosition = _position;
 	}
 
-	void CircleCollider::Move(const sf::Vector2f& _moveVector)
+	sf::Vector2f CircleCollider::GetPosition() const
 	{
-		m_centerPosition += _moveVector;
+		return m_parent->GetPosition() + m_centerPosition;
 	}
 
 	bool CircleCollider::TestCollision(CircleCollider* const _other)
 	{
-		bool isColliding = VectorLengthSq(_other->m_centerPosition - m_centerPosition) <= SQUARE(m_radius + _other->m_radius);
+		bool isColliding = VectorLengthSq(_other->GetPosition() - GetPosition()) <= SQUARE(m_radius + _other->m_radius);
 
 		ManageCollision(_other, isColliding);
 

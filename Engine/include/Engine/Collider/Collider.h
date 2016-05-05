@@ -7,7 +7,6 @@
 #include <SFML\System\Vector2.hpp>
 
 #include <list>
-#include <functional>
 
 namespace engine
 {
@@ -25,8 +24,8 @@ namespace engine
 		unsigned short GetId() const;
 		ColliderType GetColliderType() const;
 		virtual void SetPosition(const sf::Vector2f& _position) = 0;
+		virtual sf::Vector2f GetPosition() const = 0;
 
-		virtual void Move(const sf::Vector2f& _moveVector) = 0;
 		auto FindCollider(unsigned short _id);
 
 		virtual bool TestCollision(CircleCollider* const _other) = 0;
@@ -39,13 +38,7 @@ namespace engine
 
 	protected:
 		std::list<unsigned short> m_collidingIds;
-		std::function<void(const CollisionInfos&)> m_onCollisionEnter;
-		std::function<void(const CollisionInfos&)> m_onCollisionStay;
-		std::function<void(const CollisionInfos&)> m_onCollisionExit;
-		std::function<void(const CollisionInfos&)> m_onTriggerEnter;
-		std::function<void(const CollisionInfos&)> m_onTriggerStay;
-		std::function<void(const CollisionInfos&)> m_onTriggerExit;
-		ColliderType m_type;
+		ColliderType m_colliderType;
 		unsigned short m_id;
 		bool m_isTrigger;
 	};

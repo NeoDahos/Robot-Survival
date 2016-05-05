@@ -1,17 +1,21 @@
 #pragma once
 
 #include <SFML\Graphics\Sprite.hpp>
-#include <list>
+#include <SFML\Graphics\RenderStates.hpp>
 
-#include "..\Scrap\Scrap.h"
 #include <Engine\Collider\CircleCollider.h>
+#include <Engine\Object\Object.h>
+
+#include <list>
 
 namespace sf
 {
 	class RenderTarget;
 }
 
-class Robot
+class Scrap;
+
+class Robot : public engine::Object
 {
 public:
 	enum RobotType { Player, Fighter, HeavyCarrier, LightCarrier, AmphibiousCarrier };
@@ -19,7 +23,6 @@ public:
 	Robot(RobotType _type);
 	virtual ~Robot();
 
-	sf::Vector2f GetPosition() const;
 	unsigned short GetLiftPower() const;
 
 	void StartWalkning();
@@ -27,7 +30,7 @@ public:
 	void Lift(std::list<Scrap>& _scraps);
 
 	virtual void Update(float _deltaTime);
-	void Draw(sf::RenderTarget& _target);
+	virtual void Draw(sf::RenderTarget& _target, const sf::RenderStates& _states = sf::RenderStates::Default);
 
 protected:
 	void ComputeOrientation(const sf::Vector2f& _moveDirection);

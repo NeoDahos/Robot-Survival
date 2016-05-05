@@ -1,17 +1,20 @@
 #include "Robot.h"
-#include <Engine\EngineCore.h>
 
+#include <Engine\EngineCore.h>
+#include <Engine\Object\Transform.h>
 #include <Engine\Tools.h>
 
 #include <SFML\Graphics\RenderTarget.hpp>
 
+#include "..\Scrap\Scrap.h"
+
 unsigned short Robot::s_instanceCount = 0;
 
-Robot::Robot(RobotType _type) : m_collider(32.f), m_walkingSpeed(250.f), m_liftedScrap(nullptr), m_isWalking(false)
+Robot::Robot(RobotType _type) : m_collider(this, 32.f), m_walkingSpeed(250.f), m_liftedScrap(nullptr), m_isWalking(false)
 {
 	sf::FloatRect bounds;
 	m_liftLaser.setTexture(engine::TextureMng.GetTexture("LiftLaser"));
-	bounds = m_liftLaser.getGlobalBounds();
+	bounds = m_liftLaser.getLocalBounds();
 	m_liftLaser.setOrigin(bounds.width / 2.f, 0.f);
 	m_maxLiftDistance = bounds.height;
 
@@ -36,20 +39,15 @@ Robot::Robot(RobotType _type) : m_collider(32.f), m_walkingSpeed(250.f), m_lifte
 		break;
 	}
 	
-	bounds = m_sprite.getGlobalBounds();
+	bounds = m_sprite.getLocalBounds();
 	m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-	m_collider.SetPosition(m_sprite.getPosition());
+	m_collider.SetPosition(GetPosition());
 	m_id = s_instanceCount;
 	s_instanceCount++;
 }
 
 Robot::~Robot()
 {
-}
-
-sf::Vector2f Robot::GetPosition() const
-{
-	return m_sprite.getPosition();
 }
 
 unsigned short Robot::GetLiftPower() const
@@ -71,12 +69,12 @@ void Robot::Lift(std::list<Scrap>& _scraps)
 {
 	if (m_liftedScrap == nullptr)
 	{
-		sf::Vector2f selfPosition = m_sprite.getPosition();
+		sf::Vector2f selfPosition = GetPosition();
 		Scrap* scrapToLift = nullptr;
 		float minDist = m_maxLiftDistance * m_maxLiftDistance;
 		float distance = 0.f;
 
-		for (auto& scrap : _scraps)
+		for (auto&& scrap : _scraps)
 		{
 			distance = engine::VectorLengthSq(scrap.GetPosition() - selfPosition);
 			if (distance <= minDist)
@@ -103,7 +101,7 @@ void Robot::Update(float _deltaTime)
 {
 	if (m_liftedScrap != nullptr)
 	{
-		sf::Vector2f position = m_sprite.getPosition();
+		sf::Vector2f position = GetPosition();
 		sf::Vector2f laserDirection = m_liftedScrap->GetPosition() - position;
 		float angle = engine::VectorOrientedAngle(sf::Vector2f(0.f, 1.f), laserDirection);
 
@@ -124,12 +122,12 @@ void Robot::Update(float _deltaTime)
 	}
 }
 
-void Robot::Draw(sf::RenderTarget& _target)
+void Robot::Draw(sf::RenderTarget& _target, const sf::RenderStates& _states)
 {
 	if(m_liftedScrap != nullptr)
-		_target.draw(m_liftLaser);
+		_target.draw(m_liftLaser, _states.transform * m_transform->getTransform());
 
-	_target.draw(m_sprite);
+	_target.draw(m_sprite, _states.transform * m_transform->getTransform());
 }
 
 void Robot::MoveTo(const sf::Vector2f& _destination)

@@ -11,6 +11,7 @@ namespace engine
 	{
 	public:
 		Transform(Object* const _parent);
+		Transform(const Transform& _other);
 		~Transform();
 	};
 }

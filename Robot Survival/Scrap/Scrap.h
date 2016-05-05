@@ -1,9 +1,12 @@
 #pragma once
 
 #include <SFML\Graphics\Sprite.hpp>
-#include <list>
+#include <SFML\Graphics\RenderStates.hpp>
 
 #include <Engine\Collider\CircleCollider.h>
+#include <Engine\Object\Object.h>
+
+#include <list>
 
 namespace sf
 {
@@ -13,20 +16,18 @@ namespace sf
 
 class Robot;
 
-class Scrap
+class Scrap : public engine::Object
 {
 public:
 	Scrap(const sf::String& _spriteName, unsigned short _weight);
 	~Scrap();
 
-	sf::Vector2f GetPosition() const;
 	float GetSize() const;
 
 	bool AddCarrier(Robot* _robot);
 	bool RemoveCarrier(Robot* _robot);
-	void Move(sf::Vector2f _move);
 
-	void Draw(sf::RenderTarget& _target);
+	virtual void Draw(sf::RenderTarget& _target, const sf::RenderStates& _states = sf::RenderStates::Default);
 
 protected:
 	std::list<Robot*> m_carriers;

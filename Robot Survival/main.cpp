@@ -1,7 +1,9 @@
 #include <SFML\Window\Event.hpp>
 #include <SFML\System\Clock.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
+
 #include <Engine\EngineCore.h>
+#include <Engine\Object\Transform.h>
 
 #include "Global.h"
 
@@ -12,6 +14,7 @@
 int main()
 {
 	sf::RenderWindow window;
+	sf::RenderStates renderStates;
 	sf::View view;
 	sf::Event event;
 	sf::Clock timer;
@@ -30,7 +33,8 @@ int main()
 	Player player;
 	SpaceShip ship;
 	std::list<Scrap> scraps;
-	scraps.emplace(scraps.end(), "Scrap_Little", 1);
+	scraps.emplace_back("Scrap_Little", 1);
+	scraps.front().Move(sf::Vector2f(100.f, 0.f));
 
 	while (window.isOpen())
 	{
@@ -75,7 +79,7 @@ int main()
 		window.clear(sf::Color::White);
 
 		// Update scraps
-		for (auto& scrap : scraps)
+		for (auto&& scrap : scraps)
 			scrap.Draw(window);
 		// End update scraps
 
